@@ -1,0 +1,105 @@
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<table>
+  <tr>
+    <th>Ethereum (ETH): </th>
+    <td id="eth"></td>
+  </tr>
+  <tr>
+    <th>Neo (NEO): </th>
+    <td id="neo"></td>
+  </tr>
+  <tr>
+    <th>Qtum (QTUM): </th>
+    <td id="qtum"></td>
+  </tr>
+  <tr>
+    <th>_______</th>
+    <td>______ </td>
+  </tr>
+  <tr>
+    <th>Total (USD): </th>
+    <td id="total_wallet"></td>
+  </tr>
+  <tr>
+    <th>Change 1h: </th>
+    <td id="total_percent_change_1hr"></td>
+  </tr>
+  <tr>
+    <th>Change 24h: </th>
+    <td id="total_percent_change_24hr"></td>
+  </tr>
+  <tr>
+    <th> Change 7d: </th>
+    <td id="total_percent_change_7d"></td>
+  </tr>
+</table>
+
+  <script>
+  $.get("https://api.coinmarketcap.com/v1/ticker/", function(data, status) {
+    for (var i = 0; i < data.length - 1; i++) {
+      if (data[i].id == "ethereum") {
+        $("#eth").html(data[i].price_usd);
+        var eth_wallet = parseFloat(data[i].price_usd);
+        var percent_change_1hr_eth = parseFloat(data[i].percent_change_1h);
+        var percent_change_24hr_eth = parseFloat(data[i].percent_change_24h);
+        var percent_change_7d_eth = parseFloat(data[i].percent_change_7d);
+      }
+      else if (data[i].id == "neo") {
+          $("#neo").html(data[i].price_usd);
+          var neo_wallet = parseFloat(data[i].price_usd);
+          var percent_change_1hr_neo = parseFloat(data[i].percent_change_1h);
+          var percent_change_24hr_neo = parseFloat(data[i].percent_change_24h);
+          var percent_change_7d_neo = parseFloat(data[i].percent_change_7d);
+      }
+      else if (data[i].id == "qtum") {
+          $("#qtum").html(data[i].price_usd);
+          var qtum_wallet = parseFloat(data[i].price_usd);
+          var percent_change_1hr_qtum = parseFloat(data[i].percent_change_1h);
+          var percent_change_24hr_qtum = parseFloat(data[i].percent_change_24h);
+          var percent_change_7d_qtum = parseFloat(data[i].percent_change_7d);
+
+          var addedwallets = (eth_wallet+neo_wallet+qtum_wallet)
+          var addedwallets = addedwallets.toFixed(2)
+          $("#total_wallet").html(addedwallets);
+
+                    var oldprice_1hr_eth = eth_wallet/((percent_change_1hr_eth/100)+1)
+                    var oldprice_1hr_neo = neo_wallet/((percent_change_1hr_neo/100)+1)
+                    var oldprice_1hr_qtum = qtum_wallet/((percent_change_1hr_qtum/100)+1)
+                    var oldwallet_1hr = oldprice_1hr_eth + oldprice_1hr_neo + oldprice_1hr_qtum
+
+                    var oldprice_24hr_eth = eth_wallet/((percent_change_24hr_eth/100)+1)
+                    var oldprice_24hr_neo = neo_wallet/((percent_change_24hr_neo/100)+1)
+                    var oldprice_24hr_qtum = qtum_wallet/((percent_change_24hr_qtum/100)+1)
+                    var oldwallet_24hr = oldprice_24hr_eth + oldprice_24hr_neo + oldprice_24hr_qtum
+
+                    var oldprice_7d_eth = eth_wallet/((percent_change_7d_eth/100)+1)
+                    var oldprice_7d_neo = neo_wallet/((percent_change_7d_neo/100)+1)
+                    var oldprice_7d_qtum = qtum_wallet/((percent_change_7d_qtum/100)+1)
+                    var oldwallet_7d = oldprice_7d_eth + oldprice_7d_neo + oldprice_7d_qtum
+
+                    var portfolio_percent_change_1hr = ((addedwallets-oldwallet_1hr)/oldwallet_1hr)*100
+                    var portfolio_percent_change_1hr = portfolio_percent_change_1hr.toFixed(2)
+
+                    var portfolio_percent_change_24hr = ((addedwallets-oldwallet_24hr)/oldwallet_24hr)*100
+                    var portfolio_percent_change_24hr = portfolio_percent_change_24hr.toFixed(2)
+
+                    var portfolio_percent_change_7d = ((addedwallets-oldwallet_7d)/oldwallet_7d)*100
+                    var portfolio_percent_change_7d = portfolio_percent_change_7d.toFixed(2)
+
+
+                    $("#total_percent_change_1hr").html( portfolio_percent_change_1hr + "%");
+                    $("#total_percent_change_24hr").html(portfolio_percent_change_24hr + "%");
+                    $("#total_percent_change_7d").html(portfolio_percent_change_7d + "%");
+
+
+      }
+    }
+  });
+
+
+  </script>
+</body>
+</html>
